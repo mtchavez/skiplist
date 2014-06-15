@@ -1,5 +1,7 @@
 # Skiplist
 
+[![Build Status](https://drone.io/github.com/mtchavez/skiplist/status.png)](https://drone.io/github.com/mtchavez/skiplist/latest)
+
 Skiplist implementation in Go. Read more on [Skip Lists](http://en.wikipedia.org/wiki/Skip_list)
 
 This implementation is sligtly different in that it allows duplicate
