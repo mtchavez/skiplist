@@ -1,10 +1,6 @@
-// Package skiplist provides ...
 package skiplist
 
-import (
-	"math/rand"
-	"time"
-)
+import "math/rand"
 
 type List struct {
 	MaxLevel int
@@ -83,11 +79,7 @@ func minVal(x, y int) int {
 // Returns a random level used during inserting nodes
 func (l *List) randomLevel() int {
 	newLevel := 1
-	rand := rand.New(rand.NewSource(time.Now().Unix()))
-	for {
-		if rand.Float64() >= ListP {
-			break
-		}
+	for rand.Float64() >= ListP {
 		newLevel += 1
 	}
 	return minVal(newLevel, l.MaxLevel)
@@ -100,7 +92,8 @@ func (l *List) Insert(newKey int, newVal string) {
 	x := l.header
 	for i := len(x.forward) - 1; i >= 0; i-- {
 		for x.forward[i] != nil &&
-			x.forward[i].key < newKey {
+			(x.forward[i].key < newKey ||
+				(x.forward[i].key == newKey && x.forward[i].val == newVal)) {
 			x = x.forward[i]
 		}
 
