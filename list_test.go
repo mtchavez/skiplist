@@ -69,6 +69,39 @@ func TestSearchFound(t *testing.T) {
 	}
 }
 
+func TestSearchKeyValNotFound(t *testing.T) {
+	l := New()
+	found := l.SearchKeyVal(35, "Nope")
+	if found {
+		t.Errorf("Should not have found a value in an empty List")
+	}
+}
+
+func TestSearchKeyValFound(t *testing.T) {
+	l := New()
+	l.Insert(35, "My value")
+	found := l.SearchKeyVal(35, "My not value")
+	if found {
+		t.Errorf("Value should match when searching")
+	}
+
+	found = l.SearchKeyVal(35, "My value")
+	if !found {
+		t.Errorf("Should have found a value for 35")
+	}
+}
+
+func TestSearchKeyValMultipleValues(t *testing.T) {
+	l := New()
+	l.Insert(35, "My value")
+	l.Insert(35, "Another value")
+
+	found := l.SearchKeyVal(35, "My value")
+	if !found {
+		t.Errorf("Should have found 'My Value' for key 35")
+	}
+}
+
 func TestMinVal(t *testing.T) {
 	if minVal(2, 3) != 2 {
 		t.Errorf("Min value should have been 2")

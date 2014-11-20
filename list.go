@@ -68,6 +68,31 @@ func (l *List) Search(searchKey int) (string, bool) {
 	}
 }
 
+// Search for a node in the skiplist by key
+// Returns node value, if present, and a boolean
+// if the node was found or not
+func (l *List) SearchKeyVal(searchKey int, searchVal string) bool {
+	x := l.header
+	for i := len(x.forward) - 1; i >= 0; i-- {
+		for x.forward[i] != nil &&
+			x.forward[i].key <= searchKey {
+			if x.forward[i].key == searchKey && x.forward[i].val == searchVal {
+				// Value has been found so break out
+				break
+			} else {
+				x = x.forward[i]
+			}
+		}
+	}
+
+	x = x.forward[0]
+	if x != nil && x.key == searchKey && x.val == searchVal {
+		return true
+	} else {
+		return false
+	}
+}
+
 // Convenience min function to avoid importing math
 func minVal(x, y int) int {
 	if x < y {
