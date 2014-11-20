@@ -68,9 +68,9 @@ func (l *List) Search(searchKey int) (string, bool) {
 	}
 }
 
-// Search for a node in the skiplist by key
-// Returns node value, if present, and a boolean
-// if the node was found or not
+// Search for a node in the skiplist by key and value
+// Returns a boolean if a key/value combo is found in
+// the list.
 func (l *List) SearchKeyVal(searchKey int, searchVal string) bool {
 	x := l.header
 	for i := len(x.forward) - 1; i >= 0; i-- {
