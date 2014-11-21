@@ -1,5 +1,8 @@
 package skiplist
 
+// Iterator interface
+// Implements an iterator to be used to
+// navigate through the skiplist
 type Iterator interface {
 	Next() (ok bool)
 	Prev() (ok bool)

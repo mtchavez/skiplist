@@ -2,6 +2,8 @@ package skiplist
 
 import "math/rand"
 
+// List is a struct to hold the SkipList
+// structure exposing the MaxLevel
 type List struct {
 	MaxLevel int
 	header   *node
@@ -11,17 +13,19 @@ type List struct {
 }
 
 const (
+	// ListMaxLevel is the Skiplist can have
 	ListMaxLevel = 32
-	ListP        = 0.25
+	// ListP is the P value for the SkipList
+	ListP = 0.25
 )
 
-// Initialize a new skiplist with
+// New initializes a new skiplist with
 // max level of 2^32
 func New() *List {
 	return NewWithLevel(ListMaxLevel)
 }
 
-// Initialize a new skiplist with a custom
+// NewWithLevel initializes a new skiplist with a custom
 // max level. Level is set as 2^(level)
 // and is defaulted to 2^32
 func NewWithLevel(level int) *List {
@@ -31,12 +35,12 @@ func NewWithLevel(level int) *List {
 	}
 }
 
-// Returns length of list
+// Len returns length of list
 func (l *List) Len() int {
 	return l.length
 }
 
-// skiplist Iterator used for convenience to traverse
+// Iterator used for convenience to traverse
 // through skip list. Implements the Iterator interface.
 //
 // Example:
@@ -63,12 +67,11 @@ func (l *List) Search(searchKey int) (string, bool) {
 	x = x.forward[0]
 	if x != nil && x.key == searchKey {
 		return x.val, true
-	} else {
-		return "", false
 	}
+	return "", false
 }
 
-// Search for a node in the skiplist by key and value
+// SearchKeyVal searches for a node in the skiplist by key and value
 // Returns a boolean if a key/value combo is found in
 // the list.
 func (l *List) SearchKeyVal(searchKey int, searchVal string) bool {
@@ -88,9 +91,8 @@ func (l *List) SearchKeyVal(searchKey int, searchVal string) bool {
 	x = x.forward[0]
 	if x != nil && x.key == searchKey && x.val == searchVal {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 // Convenience min function to avoid importing math
@@ -105,7 +107,7 @@ func minVal(x, y int) int {
 func (l *List) randomLevel() int {
 	newLevel := 1
 	for rand.Float64() >= ListP {
-		newLevel += 1
+		newLevel++
 	}
 	return minVal(newLevel, l.MaxLevel)
 }
