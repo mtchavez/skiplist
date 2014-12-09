@@ -36,6 +36,7 @@ func NewWithLevel(level int) *List {
 	return &List{
 		MaxLevel: level,
 		header:   &Node{forward: make([]*Node, level)},
+		level:    0,
 	}
 }
 
@@ -60,7 +61,7 @@ func (l *List) Search(key int) *Node {
 func (l *List) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
-	for i := l.level; i >= 0; i-- {
+	for i := len(x.forward) - 1; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
 		}
@@ -100,7 +101,7 @@ func (l *List) Insert(key int, val []byte) *Node {
 func (l *List) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
-	for i := l.level; i >= 0; i-- {
+	for i := len(x.forward) - 1; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
 		}
@@ -109,12 +110,13 @@ func (l *List) Delete(key int) bool {
 	x = x.forward[0]
 	if x != nil && x.key == key {
 		for i := 0; i < l.level; i++ {
-			if update[i].forward[i] != x {
-				break
+			if update[i] != nil && len(update[i].forward) > i && update[i].forward[i] == x {
+				update[i].forward[i] = x.forward[i]
 			}
-			update[i].forward[i] = x.forward[i]
 		}
-		for l.level > 0 && l.header.forward[l.level] == nil {
+		// println(l.level)
+		// println(len(l.header.forward))
+		for l.level > 0 && len(l.header.forward) > l.level && l.header.forward[l.level] == nil {
 			l.level--
 		}
 		if x.forward[0] != nil {
@@ -124,9 +126,10 @@ func (l *List) Delete(key int) bool {
 			}
 			x.forward[0].backward = x.backward
 		} else {
+			// Set as footer
 			l.footer = x.backward
 		}
-
+		// Update length of list
 		l.length--
 		return true
 	}
@@ -136,11 +139,8 @@ func (l *List) Delete(key int) bool {
 // Returns a random level used during inserting nodes
 func (l *List) randomLevel() int {
 	newLevel := 1
-	for rand.Float64() >= ListP {
+	for rand.Float64() >= ListP && newLevel < l.MaxLevel {
 		newLevel++
 	}
-	if newLevel < l.MaxLevel {
-		return newLevel
-	}
-	return l.MaxLevel
+	return newLevel
 }
