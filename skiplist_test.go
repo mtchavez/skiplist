@@ -1,6 +1,9 @@
 package skiplist
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 func TestNew(t *testing.T) {
 	l := New()
@@ -28,6 +31,26 @@ func TestNewWithLevel(t *testing.T) {
 	}
 }
 
+func TestSearchNotFound(t *testing.T) {
+	l := New()
+	found := l.Search(35)
+	if found != nil {
+		t.Errorf("Should not have found a value in an empty List")
+	}
+}
+
+func TestSearchFound(t *testing.T) {
+	l := New()
+	l.Insert(35, []byte("My value"))
+	found := l.Search(35)
+	if found == nil {
+		t.Errorf("Should have found a node for 35")
+	}
+	if !bytes.Equal(found.val, []byte("My value")) {
+		t.Errorf("Value should have been 'My value'")
+	}
+}
+
 func TestInsert(t *testing.T) {
 	l := New()
 	if l.length != 0 {
@@ -52,5 +75,30 @@ func TestInsertUpdateLevel(t *testing.T) {
 	}
 	if l.length != 1 {
 		t.Errorf("Length should be 1 after inserting once")
+	}
+}
+
+func TestDelete(t *testing.T) {
+	l := New()
+	l.Insert(1, []byte("one"))
+	l.Insert(2, []byte("two"))
+	l.Insert(3, []byte("three"))
+
+	l.Delete(1)
+	if l.length != 2 {
+		t.Errorf("Length should be 2 after one delete but got %v", l.length)
+	}
+	x := l.Search(1)
+	if x != nil {
+		t.Errorf("Expected to not find deleted node but got %+v", x)
+	}
+
+	l.Delete(3)
+	if l.length != 1 {
+		t.Errorf("Length should be 1 after two deletes but got %v", l.length)
+	}
+	x = l.Search(3)
+	if x != nil {
+		t.Errorf("Expected to not find deleted node but got %+v", x)
 	}
 }

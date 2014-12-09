@@ -46,7 +46,7 @@ func (l *List) Search(key int) *Node {
 		}
 	}
 	x = x.forward[0]
-	if x.key == key {
+	if x != nil && x.key == key {
 		return x
 	}
 	return nil
@@ -80,6 +80,32 @@ func (l *List) Insert(key int, val []byte) *Node {
 	}
 	l.length++
 	return x
+}
+
+func (l *List) Delete(key int) bool {
+	update := make([]*Node, l.MaxLevel)
+	x := l.header
+	for i := l.level; i >= 0; i-- {
+		for x.forward[i] != nil && x.forward[i].key < key {
+			x = x.forward[i]
+		}
+		update[i] = x
+	}
+	x = x.forward[0]
+	if x != nil && x.key == key {
+		for i := 0; i < l.level; i++ {
+			if update[i].forward[i] != x {
+				break
+			}
+			update[i].forward[i] = x.forward[i]
+		}
+		for l.level > 0 && l.header.forward[l.level] == nil {
+			l.level--
+		}
+		l.length--
+		return true
+	}
+	return false
 }
 
 // Returns a random level used during inserting nodes
