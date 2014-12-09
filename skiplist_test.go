@@ -27,3 +27,30 @@ func TestNewWithLevel(t *testing.T) {
 		t.Errorf("Should be able to set List level")
 	}
 }
+
+func TestInsert(t *testing.T) {
+	l := New()
+	if l.length != 0 {
+		t.Errorf("Should have 0 length before inserting nodes")
+	}
+	l.Insert(2, []byte("Node two"))
+	if l.length != 1 {
+		t.Errorf("Length should be 1 after inserting once")
+	}
+	l.Insert(3, []byte("Node three"))
+	if l.length != 2 {
+		t.Errorf("Length should be 2 after inserting twice")
+	}
+}
+
+func TestInsertUpdateLevel(t *testing.T) {
+	l := New()
+	l.level = 0
+	l.Insert(2, []byte("Node two"))
+	if l.level == 0 {
+		t.Errorf("Should have updated List level")
+	}
+	if l.length != 1 {
+		t.Errorf("Length should be 1 after inserting once")
+	}
+}

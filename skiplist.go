@@ -12,13 +12,13 @@ const (
 type SkipList interface {
 	Search(key int) *Node
 	Delete(key int) bool
-	Insert(key int, val []byte) (bool, error)
+	Insert(key int, val []byte) *Node
 }
 
 type List struct {
-	Length   int
 	MaxLevel int
 	level    int
+	length   int
 	header   *Node
 }
 
@@ -36,6 +36,50 @@ func NewWithLevel(level int) *List {
 		MaxLevel: level,
 		header:   &Node{forward: make([]*Node, level)},
 	}
+}
+
+func (l *List) Search(key int) *Node {
+	x := l.header
+	for i := l.level; i >= 1; i-- {
+		for x.forward[i] != nil && x.forward[i].key < key {
+			x = x.forward[i]
+		}
+	}
+	x = x.forward[0]
+	if x.key == key {
+		return x
+	}
+	return nil
+}
+
+func (l *List) Insert(key int, val []byte) *Node {
+	update := make([]*Node, l.MaxLevel)
+	x := l.header
+	for i := l.level; i >= 0; i-- {
+		for x.forward[i] != nil && x.forward[i].key < key {
+			x = x.forward[i]
+		}
+		update[i] = x
+	}
+	x = x.forward[0]
+	if x != nil && x.key == key {
+		x.val = val
+		return x
+	}
+	newLevel := l.randomLevel()
+	if newLevel > l.level {
+		for i := l.level + 1; i < newLevel; i++ {
+			update[i] = l.header
+		}
+		l.level = newLevel
+	}
+	x = NewNode(newLevel, key, val)
+	for i := 0; i < newLevel; i++ {
+		x.forward[i] = update[i].forward[i]
+		update[i].forward[i] = x
+	}
+	l.length++
+	return x
 }
 
 // Returns a random level used during inserting nodes

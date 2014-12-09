@@ -6,14 +6,14 @@ package skiplist
 type Iterator interface {
 	Next() (ok bool)
 	Prev() (ok bool)
-	Val() string
+	Val() []byte
 	Key() int
 }
 
 type iterable struct {
-	curr *node
+	curr *Node
 	key  int
-	val  string
+	val  []byte
 }
 
 func (i *iterable) Next() bool {
@@ -34,9 +34,9 @@ func (i *iterable) Prev() bool {
 	return true
 }
 
-func (i *iterable) Val() string {
+func (i *iterable) Val() []byte {
 	if i.curr == nil {
-		return ""
+		return []byte{}
 	}
 	return i.curr.val
 }
