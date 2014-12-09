@@ -5,9 +5,6 @@ import (
 	"testing"
 )
 
-type testStruct struct {
-}
-
 func TestNext(t *testing.T) {
 	l := New()
 	i := l.Iterator()
