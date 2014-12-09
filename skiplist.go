@@ -20,6 +20,7 @@ type List struct {
 	level    int
 	length   int
 	header   *Node
+	footer   *Node
 }
 
 // New initializes a new skiplist with
@@ -36,6 +37,10 @@ func NewWithLevel(level int) *List {
 		MaxLevel: level,
 		header:   &Node{forward: make([]*Node, level)},
 	}
+}
+
+func (l *List) Iterator() Iterator {
+	return &iterable{curr: l.header}
 }
 
 func (l *List) Search(key int) *Node {
@@ -78,6 +83,16 @@ func (l *List) Insert(key int, val []byte) *Node {
 		x.forward[i] = update[i].forward[i]
 		update[i].forward[i] = x
 	}
+	x.backward = nil
+	if update[0] != l.header {
+		x.backward = update[0]
+	}
+	if x.forward[0] != nil {
+		x.forward[0].backward = x
+	}
+	if l.footer == nil || l.footer.key < key {
+		l.footer = x
+	}
 	l.length++
 	return x
 }
@@ -102,6 +117,16 @@ func (l *List) Delete(key int) bool {
 		for l.level > 0 && l.header.forward[l.level] == nil {
 			l.level--
 		}
+		if x.forward[0] != nil {
+			if x.backward == nil {
+				// Set new header
+				l.header = x.forward[0]
+			}
+			x.forward[0].backward = x.backward
+		} else {
+			l.footer = x.backward
+		}
+
 		l.length--
 		return true
 	}

@@ -36,7 +36,7 @@ func (i *iterable) Prev() bool {
 
 func (i *iterable) Val() []byte {
 	if i.curr == nil {
-		return []byte{}
+		return nil
 	}
 	return i.curr.val
 }

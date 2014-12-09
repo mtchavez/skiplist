@@ -1,6 +1,13 @@
 package skiplist
 
-import "testing"
+import (
+	"bytes"
+	"fmt"
+	"testing"
+)
+
+type testStruct struct {
+}
 
 func TestNext(t *testing.T) {
 	l := New()
@@ -8,11 +15,11 @@ func TestNext(t *testing.T) {
 	if i.Next() {
 		t.Errorf("Should not have nodes to iterate for new list")
 	}
-	l.Insert(2, "Node two")
+	l.Insert(2, []byte("Node two"))
 	i.Next()
-	l.Insert(3, "Node three")
+	l.Insert(3, []byte("Node three"))
 	i.Next()
-	if i.Val() != "Node three" {
+	if !bytes.Equal(i.Val(), []byte("Node three")) {
 		t.Errorf("Didn't iterate to next node")
 	}
 	if i.Key() != 3 {
@@ -26,11 +33,12 @@ func TestPrevious(t *testing.T) {
 	if i.Prev() {
 		t.Errorf("Should not find a val if no node")
 	}
-	l.Insert(2, "Node two")
+	l.Insert(2, []byte("Node two"))
 	i.Next()
 
-	l.Insert(3, "Node three")
+	l.Insert(3, []byte("Node three"))
 	i.Next()
+	fmt.Printf("Next: %+v\n", i.Key())
 
 	if !i.Prev() {
 		t.Errorf("Should have a previous node")
@@ -39,7 +47,7 @@ func TestPrevious(t *testing.T) {
 
 func TestValueNoCurrent(t *testing.T) {
 	i := &iterable{}
-	if i.Val() != "" {
+	if i.Val() != nil {
 		t.Errorf("Should not find a val if no node")
 	}
 }
