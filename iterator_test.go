@@ -2,7 +2,6 @@ package skiplist
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 )
 
@@ -38,7 +37,6 @@ func TestPrevious(t *testing.T) {
 
 	l.Insert(3, []byte("Node three"))
 	i.Next()
-	fmt.Printf("Next: %+v\n", i.Key())
 
 	if !i.Prev() {
 		t.Errorf("Should have a previous node")
