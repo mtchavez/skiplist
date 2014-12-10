@@ -1,12 +1,13 @@
 # Skiplist
 
+[![Latest Version](http://img.shields.io/github/release/mtchavez/skiplist.svg?style=flat-square)](https://github.com/mtchavez/skiplist/releases)
 [![Build Status](https://drone.io/github.com/mtchavez/skiplist/status.png)](https://drone.io/github.com/mtchavez/skiplist/latest)
 [![Coverage Status](https://coveralls.io/repos/mtchavez/skiplist/badge.png?branch=master)](https://coveralls.io/r/mtchavez/skiplist?branch=master)
+[![Go Documentation](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/mtchavez/skiplist)
 
 Skiplist implementation in Go. Read more on [Skip Lists](http://en.wikipedia.org/wiki/Skip_list)
 
-This implementation is sligtly different in that it allows duplicate
-keys for nodes.
+Skiplist with various additions and potential variations on the standard list.
 
 ## Install
 
@@ -31,8 +32,8 @@ package main
 
 func main() {
     list := skiplist.New()
-    list.Insert(1, "Node 1")
-    list.Insert(2, "Node 2")
+    list.Insert(1, []byte("Node 1"))
+    list.Insert(2, []byte("Node 2"))
 }
 ```
 
@@ -43,9 +44,9 @@ package main
 
 func main() {
     list := skiplist.New()
-    list.Insert(1, "Node 1")
-    list.Insert(2, "Node 2")
-    list.Insert(3, "Node 3")
+    list.Insert(1, []byte("Node 1"))
+    list.Insert(2, []byte("Node 2"))
+    list.Insert(3, []byte("Node 3"))
 
     for i := list.Iterator(); i.Next(); {
         // Print Key
@@ -72,9 +73,3 @@ Run tests with coverage
 * Implement delete node
 * Implement generic node key/value
 * Benchmarks
-
-## License
-
-Written by Chavez
-
-Released under the MIT License: http://www.opensource.org/licenses/mit-license.php
