@@ -21,6 +21,7 @@ type List struct {
 	length   int
 	header   *Node
 	footer   *Node
+	fingers  []*Node
 }
 
 // New initializes a new skiplist with
@@ -46,7 +47,7 @@ func (l *List) Iterator() Iterator {
 
 func (l *List) Search(key int) *Node {
 	x := l.header
-	for i := l.level; i >= 1; i-- {
+	for i := len(x.forward) - 1; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
 		}
