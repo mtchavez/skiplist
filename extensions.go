@@ -13,17 +13,22 @@ func (l *List) Split(splitKey int) *List {
 			x = x.forward[i]
 		}
 		if x.forward[i] != nil {
+			newList.header.forward[i] = x.forward[i]
+			x.forward[i] = nil
 			newList.length--
 		}
-		newList.header.forward[i] = x.forward[i]
-		x.forward[i] = nil
 	}
-	for l.header.forward[l.level] == nil && l.level >= 0 {
+	for l.header.forward[l.level] == nil && l.level > 0 {
 		l.level--
 	}
-	for newList.header.forward[newList.level] == nil && newList.level >= 0 {
+
+	for newList.header.forward[newList.level] == nil && newList.level > 0 {
 		newList.level--
 	}
-	l.length = l.length - newList.length
+	if l.length == newList.length {
+		newList.length = 0
+	} else {
+		l.length = l.length - newList.length
+	}
 	return newList
 }
