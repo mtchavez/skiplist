@@ -42,6 +42,10 @@ Iterate through nodes
 ```go
 package main
 
+import (
+    "fmt"
+)
+
 func main() {
     list := skiplist.New()
     list.Insert(1, []byte("Node 1"))
@@ -70,6 +74,5 @@ Run tests with coverage
 
 ## TODO
 
-* Implement delete node
 * Implement generic node key/value
 * Benchmarks
