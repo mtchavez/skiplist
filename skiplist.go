@@ -29,7 +29,7 @@ var _ SkipList = (*List)(nil)
 // Returns a random level used during inserting nodes
 func randomLevel(maxLevel int) int {
 	newLevel := 1
-	for rand.Float64() >= ListP && newLevel < maxLevel {
+	for rand.Float64() >= ListP && newLevel < maxLevel && newLevel < ListMaxLevel-1 {
 		newLevel++
 	}
 	return newLevel
@@ -95,6 +95,16 @@ func (l *List) Insert(key int, val []byte) *Node {
 	for i := 0; i < newLevel; i++ {
 		x.forward[i] = update[i].forward[i]
 		update[i].forward[i] = x
+	}
+	x.backward = nil
+	if update[0] != l.header {
+		x.backward = update[0]
+	}
+	if x.forward[0] != nil {
+		x.forward[0].backward = x
+	}
+	if l.footer == nil || l.footer.key < key {
+		l.footer = x
 	}
 	l.length++
 	return x
