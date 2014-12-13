@@ -8,7 +8,7 @@ func (l *List) Split(splitKey int) *List {
 	newList := NewListWithLevel(level)
 	newList.length = 0
 	x := l.header
-	for i := len(x.forward) - 1; i >= 0; i-- {
+	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < splitKey {
 			x = x.forward[i]
 		}

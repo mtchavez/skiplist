@@ -33,8 +33,8 @@ func (l *DupeList) Iterator() Iterator {
 
 func (l *DupeList) Search(key int) *Node {
 	x := l.header
-	for i := len(x.forward) - 1; i >= 0; i-- {
-		for x.forward[i] != nil && x.forward[i].key < key {
+	for i := l.level; i >= 0; i-- {
+		for i < len(x.forward) && x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
 		}
 	}
@@ -48,17 +48,13 @@ func (l *DupeList) Search(key int) *Node {
 func (l *DupeList) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
-	for i := len(x.forward) - 1; i >= 0; i-- {
+	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
 		}
 		update[i] = x
 	}
 	x = x.forward[0]
-	// if x != nil && x.key == key {
-	// 	x.val = val
-	// 	return x
-	// }
 	newLevel := randomLevel(l.MaxLevel)
 	if newLevel > l.level {
 		for i := l.level + 1; i < newLevel; i++ {
@@ -71,16 +67,6 @@ func (l *DupeList) Insert(key int, val []byte) *Node {
 		x.forward[i] = update[i].forward[i]
 		update[i].forward[i] = x
 	}
-	x.backward = nil
-	if update[0] != l.header {
-		x.backward = update[0]
-	}
-	if x.forward[0] != nil {
-		x.forward[0].backward = x
-	}
-	if l.footer == nil || l.footer.key < key {
-		l.footer = x
-	}
 	l.length++
 	return x
 }
@@ -88,7 +74,7 @@ func (l *DupeList) Insert(key int, val []byte) *Node {
 func (l *DupeList) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
-	for i := len(x.forward) - 1; i >= 0; i-- {
+	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
 		}
@@ -97,24 +83,14 @@ func (l *DupeList) Delete(key int) bool {
 	x = x.forward[0]
 	if x != nil && x.key == key {
 		for i := 0; i < l.level; i++ {
-			if update[i] != nil && len(update[i].forward) > i && update[i].forward[i] == x {
-				update[i].forward[i] = x.forward[i]
+			if update[i].forward[i] != x {
+				break
 			}
+			update[i].forward[i] = x.forward[i]
 		}
-		for l.level > 0 && len(l.header.forward) > l.level && l.header.forward[l.level] == nil {
+		for l.level > 1 && len(l.header.forward) > l.level && l.header.forward[l.level-1] == nil {
 			l.level--
 		}
-		if x.forward[0] != nil {
-			if x.backward == nil {
-				// Set new header
-				l.header = x.forward[0]
-			}
-			x.forward[0].backward = x.backward
-		} else {
-			// Set as footer
-			l.footer = x.backward
-		}
-		// Update length of list
 		l.length--
 		return true
 	}
