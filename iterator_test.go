@@ -6,7 +6,7 @@ import (
 )
 
 func TestNext(t *testing.T) {
-	l := New()
+	l := NewList()
 	i := l.Iterator()
 	if i.Next() {
 		t.Errorf("Should not have nodes to iterate for new list")
@@ -24,7 +24,7 @@ func TestNext(t *testing.T) {
 }
 
 func TestPrevious(t *testing.T) {
-	l := New()
+	l := NewList()
 	i := l.Iterator()
 	if i.Prev() {
 		t.Errorf("Should not find a val if no node")

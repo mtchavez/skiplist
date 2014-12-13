@@ -3,7 +3,7 @@ package skiplist
 import "testing"
 
 func TestSplit(t *testing.T) {
-	list1 := New()
+	list1 := NewList()
 	for i := 10; i > 0; i-- {
 		list1.Insert(i, []byte{})
 	}
@@ -34,7 +34,7 @@ func TestSplit(t *testing.T) {
 }
 
 func TestSplit_NoValuesAbove(t *testing.T) {
-	list1 := New()
+	list1 := NewList()
 	for i := 10; i > 0; i-- {
 		list1.Insert(i, []byte{})
 	}

@@ -13,6 +13,7 @@ type SkipList interface {
 	Search(key int) *Node
 	Delete(key int) bool
 	Insert(key int, val []byte) *Node
+	Iterator() Iterator
 }
 
 type List struct {
@@ -21,19 +22,29 @@ type List struct {
 	length   int
 	header   *Node
 	footer   *Node
-	fingers  []*Node
+}
+
+var _ SkipList = (*List)(nil)
+
+// Returns a random level used during inserting nodes
+func randomLevel(maxLevel int) int {
+	newLevel := 1
+	for rand.Float64() >= ListP && newLevel < maxLevel {
+		newLevel++
+	}
+	return newLevel
 }
 
 // New initializes a new skiplist with
 // max level of 32 or 2^32 elements
-func New() *List {
-	return NewWithLevel(ListMaxLevel)
+func NewList() *List {
+	return NewListWithLevel(ListMaxLevel)
 }
 
 // NewWithLevel initializes a new skiplist with a custom
 // max level. Level is defaulted to 32 to allow
 // for 2^32 max elements
-func NewWithLevel(level int) *List {
+func NewListWithLevel(level int) *List {
 	return &List{
 		MaxLevel: level,
 		header:   &Node{forward: make([]*Node, level)},
@@ -73,7 +84,7 @@ func (l *List) Insert(key int, val []byte) *Node {
 		x.val = val
 		return x
 	}
-	newLevel := l.randomLevel()
+	newLevel := randomLevel(l.MaxLevel)
 	if newLevel > l.level {
 		for i := l.level + 1; i < newLevel; i++ {
 			update[i] = l.header
@@ -115,8 +126,6 @@ func (l *List) Delete(key int) bool {
 				update[i].forward[i] = x.forward[i]
 			}
 		}
-		// println(l.level)
-		// println(len(l.header.forward))
 		for l.level > 0 && len(l.header.forward) > l.level && l.header.forward[l.level] == nil {
 			l.level--
 		}
@@ -135,13 +144,4 @@ func (l *List) Delete(key int) bool {
 		return true
 	}
 	return false
-}
-
-// Returns a random level used during inserting nodes
-func (l *List) randomLevel() int {
-	newLevel := 1
-	for rand.Float64() >= ListP && newLevel < l.MaxLevel {
-		newLevel++
-	}
-	return newLevel
 }

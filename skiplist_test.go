@@ -6,7 +6,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	l := New()
+	l := NewList()
 	if l.MaxLevel != ListMaxLevel {
 		t.Errorf("Default max level should be %d", ListMaxLevel)
 	}
@@ -22,7 +22,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewWithLevel(t *testing.T) {
-	l := NewWithLevel(64)
+	l := NewListWithLevel(64)
 	if l.MaxLevel == ListMaxLevel {
 		t.Errorf("Should not be Default max level")
 	}
@@ -32,7 +32,7 @@ func TestNewWithLevel(t *testing.T) {
 }
 
 func TestSearchNotFound(t *testing.T) {
-	l := New()
+	l := NewList()
 	found := l.Search(35)
 	if found != nil {
 		t.Errorf("Should not have found a value in an empty List")
@@ -40,7 +40,7 @@ func TestSearchNotFound(t *testing.T) {
 }
 
 func TestSearchFound(t *testing.T) {
-	l := New()
+	l := NewList()
 	l.Insert(35, []byte("My value"))
 	found := l.Search(35)
 	if found == nil {
@@ -52,7 +52,7 @@ func TestSearchFound(t *testing.T) {
 }
 
 func TestInsert(t *testing.T) {
-	l := New()
+	l := NewList()
 	if l.length != 0 {
 		t.Errorf("Should have 0 length before inserting nodes")
 	}
@@ -67,7 +67,7 @@ func TestInsert(t *testing.T) {
 }
 
 func TestInsertUpdateLevel(t *testing.T) {
-	l := New()
+	l := NewList()
 	l.level = 0
 	l.Insert(2, []byte("Node two"))
 	if l.level == 0 {
@@ -79,7 +79,7 @@ func TestInsertUpdateLevel(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	l := New()
+	l := NewList()
 	l.Insert(1, []byte("one"))
 	l.Insert(2, []byte("two"))
 	l.Insert(3, []byte("three"))

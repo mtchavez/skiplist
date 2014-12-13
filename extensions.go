@@ -5,8 +5,8 @@ func (l *List) Split(splitKey int) *List {
 	if l.level > level {
 		level = l.level
 	}
-	newList := NewWithLevel(level)
-	newList.length = l.length
+	newList := NewListWithLevel(level)
+	newList.length = 0
 	x := l.header
 	for i := len(x.forward) - 1; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < splitKey {
@@ -15,7 +15,7 @@ func (l *List) Split(splitKey int) *List {
 		if x.forward[i] != nil {
 			newList.header.forward[i] = x.forward[i]
 			x.forward[i] = nil
-			newList.length--
+			newList.length++
 		}
 	}
 	for l.header.forward[l.level] == nil && l.level > 0 {
@@ -25,10 +25,6 @@ func (l *List) Split(splitKey int) *List {
 	for newList.header.forward[newList.level] == nil && newList.level > 0 {
 		newList.level--
 	}
-	if l.length == newList.length {
-		newList.length = 0
-	} else {
-		l.length = l.length - newList.length
-	}
+	l.length = l.length - newList.length
 	return newList
 }
