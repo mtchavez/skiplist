@@ -3,6 +3,9 @@ go:
   - 1.3
   - tip
 install:
+  # New cover package
   - go get golang.org/x/tools/cmd/cover
+  # Old cover package
+  - go get code.google.com/p/go.tools/cmd/cover
 script:
   - go test --cover --bench=.*
