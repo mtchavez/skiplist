@@ -73,10 +73,14 @@ func (l *List) Search(key int) *Node {
 func (l *List) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
+	var alreadyChecked *Node
 	for i := l.level; i >= 0; i-- {
-		for x.forward[i] != nil && x.forward[i].key < key {
+		for x.forward[i] != nil &&
+			alreadyChecked != x.forward[i] &&
+			x.forward[i].key < key {
 			x = x.forward[i]
 		}
+		alreadyChecked = x.forward[i]
 		update[i] = x
 	}
 	x = x.forward[0]
@@ -113,10 +117,14 @@ func (l *List) Insert(key int, val []byte) *Node {
 func (l *List) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
+	var alreadyChecked *Node
 	for i := l.level; i >= 0; i-- {
-		for x.forward[i] != nil && x.forward[i].key < key {
+		for x.forward[i] != nil &&
+			alreadyChecked != x.forward[i] &&
+			x.forward[i].key < key {
 			x = x.forward[i]
 		}
+		alreadyChecked = x.forward[i]
 		update[i] = x
 	}
 	x = x.forward[0]
