@@ -73,5 +73,6 @@ Run tests with coverage
 
 ## TODO
 
-* Implement generic node key/value
-* Benchmarks
+* Update to use `interface{}` for key/value
+  * With a compare interface
+* Concurrent skiplist implementation
