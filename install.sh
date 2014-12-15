@@ -2,8 +2,8 @@
 #
 # Install dependencies
 
-go version | grep 1.3 > /dev/null
 go get -d -v ./...
+go version | grep 1.3 > /dev/null
 if [ $? == 0 ]; then
     go get code.google.com/p/go.tools/cmd/cover
 else
