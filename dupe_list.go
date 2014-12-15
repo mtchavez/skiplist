@@ -1,6 +1,9 @@
 package skiplist
 
+import "sync"
+
 type DupeList struct {
+	sync.RWMutex
 	MaxLevel int
 	level    int
 	length   int
@@ -32,6 +35,8 @@ func (l *DupeList) Iterator() Iterator {
 }
 
 func (l *DupeList) Search(key int) *Node {
+	l.RLock()
+	defer l.RUnlock()
 	x := l.header
 	for i := l.level; i >= 0; i-- {
 		for i < len(x.forward) && x.forward[i] != nil && x.forward[i].key < key {
@@ -48,6 +53,9 @@ func (l *DupeList) Search(key int) *Node {
 func (l *DupeList) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
+	l.Lock()
+	defer l.Unlock()
+
 	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
@@ -84,6 +92,9 @@ func (l *DupeList) Insert(key int, val []byte) *Node {
 func (l *DupeList) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
+	l.Lock()
+	defer l.Unlock()
+
 	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
 			x = x.forward[i]
