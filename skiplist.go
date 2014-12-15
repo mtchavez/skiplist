@@ -1,6 +1,9 @@
 package skiplist
 
-import "math/rand"
+import (
+	"math/rand"
+	"sync"
+)
 
 const (
 	// ListMaxLevel is the Skiplist can have
@@ -17,6 +20,7 @@ type SkipList interface {
 }
 
 type List struct {
+	sync.RWMutex
 	MaxLevel int
 	level    int
 	length   int
@@ -57,6 +61,8 @@ func (l *List) Iterator() Iterator {
 }
 
 func (l *List) Search(key int) *Node {
+	l.RLock()
+	defer l.RUnlock()
 	x := l.header
 	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil && x.forward[i].key < key {
@@ -74,6 +80,9 @@ func (l *List) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
 	var alreadyChecked *Node
+	l.Lock()
+	defer l.Unlock()
+
 	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil &&
 			alreadyChecked != x.forward[i] &&
@@ -118,6 +127,9 @@ func (l *List) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
 	var alreadyChecked *Node
+	l.Lock()
+	defer l.Unlock()
+
 	for i := l.level; i >= 0; i-- {
 		for x.forward[i] != nil &&
 			alreadyChecked != x.forward[i] &&

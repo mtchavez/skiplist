@@ -12,6 +12,17 @@ func BenchmarkInsert(b *testing.B) {
 	}
 }
 
+func BenchmarkParallelInsert(b *testing.B) {
+	l := NewList()
+	i := 0
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			i++
+			l.Insert(i, []byte(fmt.Sprintf("Skiplist node insert %i", i)))
+		}
+	})
+}
+
 func BenchmarkDelete(b *testing.B) {
 	l := NewList()
 	for i := 0; i < 1000000; i++ {
@@ -22,4 +33,19 @@ func BenchmarkDelete(b *testing.B) {
 		l.Delete(i)
 	}
 	b.StopTimer()
+}
+
+func BenchmarkParallelDelete(b *testing.B) {
+	l := NewList()
+	for i := 0; i < 1000000; i++ {
+		l.Insert(i, []byte(fmt.Sprintf("Skiplist node insert %i", i)))
+	}
+	b.ResetTimer()
+	i := 0
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			i++
+			l.Delete(i)
+		}
+	})
 }
