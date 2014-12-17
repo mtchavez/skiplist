@@ -1,6 +1,9 @@
 package skiplist
 
-import "sync"
+import (
+	"bytes"
+	"sync"
+)
 
 type DupeList struct {
 	sync.RWMutex
@@ -46,6 +49,31 @@ func (l *DupeList) Search(key int) *Node {
 	x = x.forward[0]
 	if x != nil && x.key == key {
 		return x
+	}
+	return nil
+}
+
+func (l *DupeList) SearchKeyVal(key int, val []byte) *Node {
+	l.RLock()
+	defer l.RUnlock()
+	x := l.header
+	for i := l.level; i >= 0; i-- {
+		for i < len(x.forward) && x.forward[i] != nil && x.forward[i].key < key {
+			x = x.forward[i]
+		}
+	}
+	x = x.forward[0]
+	if x != nil {
+		for x != nil && x.key == key {
+			if bytes.Equal(x.val, val) {
+				return x
+			}
+			if x.forward != nil {
+				x = x.forward[0]
+			} else {
+				x = nil
+			}
+		}
 	}
 	return nil
 }

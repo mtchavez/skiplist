@@ -50,6 +50,7 @@ func TestDupeListSearchFound(t *testing.T) {
 		t.Errorf("Value should have been 'My value'")
 	}
 }
+
 func TestDupeListSearchDupeKeys(t *testing.T) {
 	l := NewDupeList()
 	l.Insert(35, []byte("My value"))
@@ -62,6 +63,21 @@ func TestDupeListSearchDupeKeys(t *testing.T) {
 		t.Errorf("Value should have been '35 35' but got %+v", found.val)
 	}
 }
+
+func TestDupeListSearchKeyVal(t *testing.T) {
+	l := NewDupeList()
+	l.Insert(35, []byte("My value"))
+	l.Insert(35, []byte("35 35"))
+	found := l.SearchKeyVal(35, []byte("WHAT"))
+	if found != nil {
+		t.Errorf("Should not have found a node with mismatched value but got %+v", found)
+	}
+	found = l.SearchKeyVal(35, []byte("My value"))
+	if !bytes.Equal(found.val, []byte("My value")) {
+		t.Errorf("Value should have been 'My value' but got %+v", found.val)
+	}
+}
+
 func TestDupeInsert(t *testing.T) {
 	l := NewDupeList()
 	if l.length != 0 {
