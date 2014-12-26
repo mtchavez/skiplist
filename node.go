@@ -1,8 +1,6 @@
 package skiplist
 
-// Internal skiplist node
-//
-// Implements a node for a skiplist which is a linked list
+// Node for a skiplist which is a linked list
 // node containing a slice of forward referencing nodes,
 // the previous node and the key and value of the node
 type Node struct {

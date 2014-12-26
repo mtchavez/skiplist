@@ -12,6 +12,8 @@ const (
 	ListP = 0.25
 )
 
+// SkipList interface defining the methods
+// needed for a skip list
 type SkipList interface {
 	Search(key int) *Node
 	Delete(key int) bool
@@ -19,6 +21,9 @@ type SkipList interface {
 	Iterator() Iterator
 }
 
+// List is a basic skip list implementation
+// with search, delete, and insert functionality
+// and uses a mutex to allow for multi-threaded interaction
 type List struct {
 	sync.RWMutex
 	MaxLevel int
@@ -39,13 +44,13 @@ func randomLevel(maxLevel int) int {
 	return newLevel
 }
 
-// New initializes a new skiplist with
+// NewList initializes a new skiplist with
 // max level of 32 or 2^32 elements
 func NewList() *List {
 	return NewListWithLevel(ListMaxLevel)
 }
 
-// NewWithLevel initializes a new skiplist with a custom
+// NewListWithLevel initializes a new skiplist with a custom
 // max level. Level is defaulted to 32 to allow
 // for 2^32 max elements
 func NewListWithLevel(level int) *List {
@@ -56,6 +61,8 @@ func NewListWithLevel(level int) *List {
 	}
 }
 
+// Iterator returns an iterable from the current
+// head of the skiplist.
 func (l *List) Iterator() Iterator {
 	return &iterable{curr: l.header}
 }
@@ -65,6 +72,8 @@ func (l *List) Size() int {
 	return l.length
 }
 
+// Search for a node in the skip list by the key
+// will return a Node if found or nil if not found
 func (l *List) Search(key int) *Node {
 	l.RLock()
 	defer l.RUnlock()
@@ -81,6 +90,9 @@ func (l *List) Search(key int) *Node {
 	return nil
 }
 
+// Insert a new node into the skip list providing a
+// integer key and a byte array value. Will return
+// the inserted Node
 func (l *List) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
@@ -128,6 +140,8 @@ func (l *List) Insert(key int, val []byte) *Node {
 	return x
 }
 
+// Delete will delete a node for the provided key
+// will return a true/false if Node was deleted or not
 func (l *List) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header

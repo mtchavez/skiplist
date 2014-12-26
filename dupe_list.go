@@ -5,6 +5,8 @@ import (
 	"sync"
 )
 
+// DupeList implements the SkipList interface
+// but allows for duplicate keys to be inserted
 type DupeList struct {
 	sync.RWMutex
 	MaxLevel int
@@ -33,10 +35,14 @@ func NewDupeListWithLevel(level int) *DupeList {
 	}
 }
 
+// Iterator returns an iterable from current list header
 func (l *DupeList) Iterator() Iterator {
 	return &iterable{curr: l.header}
 }
 
+// Search by key to find the matching node in the list
+// For duplicate keys this will always return the last
+// inserted node for the key
 func (l *DupeList) Search(key int) *Node {
 	l.RLock()
 	defer l.RUnlock()
@@ -53,6 +59,8 @@ func (l *DupeList) Search(key int) *Node {
 	return nil
 }
 
+// SearchKeyVal allows you to search for nodes by the key and
+// value of the node which is useful for nodes with duplicate keys
 func (l *DupeList) SearchKeyVal(key int, val []byte) *Node {
 	l.RLock()
 	defer l.RUnlock()
@@ -78,6 +86,7 @@ func (l *DupeList) SearchKeyVal(key int, val []byte) *Node {
 	return nil
 }
 
+// Insert a node into the list given a key and a byte array value
 func (l *DupeList) Insert(key int, val []byte) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
@@ -117,6 +126,7 @@ func (l *DupeList) Insert(key int, val []byte) *Node {
 	return x
 }
 
+// Delete a node by the key provided
 func (l *DupeList) Delete(key int) bool {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
