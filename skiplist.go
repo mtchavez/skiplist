@@ -60,6 +60,11 @@ func (l *List) Iterator() Iterator {
 	return &iterable{curr: l.header}
 }
 
+// Size returns the length of the list
+func (l *List) Size() int {
+	return l.length
+}
+
 func (l *List) Search(key int) *Node {
 	l.RLock()
 	defer l.RUnlock()
