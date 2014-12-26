@@ -20,7 +20,7 @@ Initialize a skiplist
 package main
 
 func main() {
-    list := skiplist.New()
+    list := skiplist.NewList()
 }
 ```
 
@@ -30,7 +30,7 @@ Insert Nodes
 package main
 
 func main() {
-    list := skiplist.New()
+    list := skiplist.NewList()
     list.Insert(1, []byte("Node 1"))
     list.Insert(2, []byte("Node 2"))
 }
@@ -46,7 +46,7 @@ import (
 )
 
 func main() {
-    list := skiplist.New()
+    list := skiplist.NewList()
     list.Insert(1, []byte("Node 1"))
     list.Insert(2, []byte("Node 2"))
     list.Insert(3, []byte("Node 3"))
