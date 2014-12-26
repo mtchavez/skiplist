@@ -23,6 +23,11 @@ func NewNode(level, key int, val []byte) *Node {
 	}
 }
 
+// Value returns val of node
+func (n *Node) Value() []byte {
+	return n.val
+}
+
 // Returns next node or nil if next node is not present
 func (n *Node) next() *Node {
 	if len(n.forward) == 0 {
