@@ -25,13 +25,13 @@ type CList struct {
 
 // var _ SkipList = (*CList)(nil)
 
-// NewDupeList initializes a new skiplist with
+// NewCList initializes a new skiplist with
 // max level of 32 or 2^32 elements that allows duplicates
 func NewCList() *CList {
 	return NewCListWithLevel(ListMaxLevel)
 }
 
-// NewDupeListWithLevel initializes a new skiplist with a custom
+// NewCListWithLevel initializes a new skiplist with a custom
 // max level. Level is defaulted to 32 to allow
 // for 2^32 max elements
 func NewCListWithLevel(level int) *CList {
