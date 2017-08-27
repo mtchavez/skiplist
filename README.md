@@ -3,6 +3,8 @@
 [![Latest Version](http://img.shields.io/github/release/mtchavez/skiplist.svg?style=flat-square)](https://github.com/mtchavez/skiplist/releases)
 [![Build Status](https://travis-ci.org/mtchavez/skiplist.svg)](https://travis-ci.org/mtchavez/skiplist)
 [![Go Documentation](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/mtchavez/skiplist)
+[![Coverage Status](https://coveralls.io/repos/github/mtchavez/skiplist/badge.svg?branch=master)](https://coveralls.io/github/mtchavez/skiplist?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mtchavez/skiplist)](https://goreportcard.com/report/github.com/mtchavez/skiplist)
 
 Skiplist implementation in Go. Read more on [Skip Lists](http://en.wikipedia.org/wiki/Skip_list)
 
