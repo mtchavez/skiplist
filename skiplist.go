@@ -9,7 +9,7 @@ const (
 	// ListMaxLevel is the Skiplist can have
 	ListMaxLevel = 32
 	// ListP is the P value for the SkipList
-	ListP = 0.25
+	ListP = 0.5
 )
 
 // SkipList interface defining the methods
