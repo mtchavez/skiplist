@@ -6,7 +6,7 @@ package skiplist
 type Iterator interface {
 	Next() (ok bool)
 	Prev() (ok bool)
-	Val() []byte
+	Val() interface{}
 	Key() int
 }
 
@@ -34,7 +34,7 @@ func (i *iterable) Prev() bool {
 	return true
 }
 
-func (i *iterable) Val() []byte {
+func (i *iterable) Val() interface{} {
 	if i.curr == nil {
 		return nil
 	}

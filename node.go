@@ -7,13 +7,13 @@ type Node struct {
 	forward  []*Node
 	backward *Node
 	key      int
-	val      []byte
+	val      interface{}
 }
 
 // NewNode takes a level used for the forward slice
 // referencing linked nodes as well as the key and
 // value of the node
-func NewNode(level, key int, val []byte) *Node {
+func NewNode(level, key int, val interface{}) *Node {
 	return &Node{
 		forward: make([]*Node, level),
 		key:     key,
@@ -22,7 +22,7 @@ func NewNode(level, key int, val []byte) *Node {
 }
 
 // Value returns val of node
-func (n *Node) Value() []byte {
+func (n *Node) Value() interface{} {
 	return n.val
 }
 

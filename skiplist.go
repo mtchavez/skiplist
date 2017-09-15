@@ -17,7 +17,7 @@ const (
 type SkipList interface {
 	Search(key int) *Node
 	Delete(key int) bool
-	Insert(key int, val []byte) *Node
+	Insert(key int, val interface{}) *Node
 	Iterator() Iterator
 }
 
@@ -93,7 +93,7 @@ func (l *List) Search(key int) *Node {
 // Insert a new node into the skip list providing a
 // integer key and a byte array value. Will return
 // the inserted Node
-func (l *List) Insert(key int, val []byte) *Node {
+func (l *List) Insert(key int, val interface{}) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
 	var alreadyChecked *Node

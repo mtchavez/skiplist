@@ -1,6 +1,9 @@
 package skiplist
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func ExampleNewList() {
 	l := NewList()
@@ -39,7 +42,7 @@ func ExampleList_Search() {
 	found := l.Search(4)
 
 	fmt.Printf("Searched for 45 and got %+v\n", notFound)
-	fmt.Printf("Searched for 4 and got '%+v'\n", string(found.Value()))
+	fmt.Printf("Searched for 4 and got '%+v'\n", string(reflect.ValueOf(found.Value()).Bytes()))
 	// Output:
 	// Searched for 45 and got <nil>
 	// Searched for 4 and got 'example 4'
@@ -53,7 +56,7 @@ func ExampleList_Delete() {
 	l.Insert(4, []byte("example 4"))
 
 	found := l.Search(4)
-	fmt.Printf("Searched for 4 and got '%+v'\n", string(found.Value()))
+	fmt.Printf("Searched for 4 and got '%+v'\n", string(reflect.ValueOf(found.Value()).Bytes()))
 
 	// Delete node
 	fmt.Printf("Deleted key 4? %+v\n", l.Delete(4))
