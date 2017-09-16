@@ -78,23 +78,23 @@ Run tests with coverage
 Benchmarked with on a 2.3 GHz Intel Core i7.
 
 ```
+# Benchmarked on 2017-09-16
 goos: darwin
 goarch: amd64
 pkg: github.com/mtchavez/skiplist
-BenchmarkInsert_1000-8              2000            850617 ns/op
-BenchmarkInsert_10000-8              200           9111489 ns/op
-BenchmarkInsert_100000-8              10         112362795 ns/op
-BenchmarkInsert_1000000-8              1        2612950317 ns/op
-BenchmarkParallelInsert-8        1000000              2935 ns/op
-BenchmarkDelete_1000-8              5000            216831 ns/op
-BenchmarkDelete_10000-8              500           3288757 ns/op
-BenchmarkDelete_100000-8              30          44254999 ns/op
-BenchmarkDelete_1000000-8              3         432647827 ns/op
-BenchmarkParallelDelete-8        2000000               715 ns/op
+BenchmarkInsert_1000-8              2000            805488 ns/op
+BenchmarkInsert_10000-8              200           8370616 ns/op
+BenchmarkInsert_100000-8              20          98251825 ns/op
+BenchmarkInsert_1000000-8              1        1122310227 ns/op
+BenchmarkParallelInsert-8        1000000              1349 ns/op
+BenchmarkDelete_1000-8              5000            221056 ns/op
+BenchmarkDelete_10000-8              500           3577634 ns/op
+BenchmarkDelete_100000-8              30          61547826 ns/op
+BenchmarkDelete_1000000-8              2         611290978 ns/op
+BenchmarkParallelDelete-8        2000000               802 ns/op
 ```
 
 ## TODO
 
-* Update to use `interface{}` for key/value
-  * With a compare interface
+* Implement a compare interface
 * Concurrent skiplist implementation
