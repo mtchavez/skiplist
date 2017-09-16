@@ -2,6 +2,7 @@ package skiplist
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
@@ -46,7 +47,7 @@ func TestSearchFound(t *testing.T) {
 	if found == nil {
 		t.Errorf("Should have found a node for 35")
 	}
-	if !bytes.Equal(found.val, []byte("My value")) {
+	if !bytes.Equal(reflect.ValueOf(found.val).Bytes(), []byte("My value")) {
 		t.Errorf("Value should have been 'My value'")
 	}
 }

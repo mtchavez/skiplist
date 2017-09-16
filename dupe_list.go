@@ -1,7 +1,7 @@
 package skiplist
 
 import (
-	"bytes"
+	"reflect"
 	"sync"
 )
 
@@ -73,7 +73,7 @@ func (l *DupeList) SearchKeyVal(key int, val []byte) *Node {
 	x = x.forward[0]
 	if x != nil {
 		for x != nil && x.key == key {
-			if bytes.Equal(x.val, val) {
+			if reflect.DeepEqual(x.val, val) {
 				return x
 			}
 			if x.forward != nil {
@@ -87,7 +87,7 @@ func (l *DupeList) SearchKeyVal(key int, val []byte) *Node {
 }
 
 // Insert a node into the list given a key and a byte array value
-func (l *DupeList) Insert(key int, val []byte) *Node {
+func (l *DupeList) Insert(key int, val interface{}) *Node {
 	update := make([]*Node, l.MaxLevel)
 	x := l.header
 	l.Lock()

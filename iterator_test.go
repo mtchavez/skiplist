@@ -2,6 +2,7 @@ package skiplist
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestNext(t *testing.T) {
 	i.Next()
 	l.Insert(3, []byte("Node three"))
 	i.Next()
-	if !bytes.Equal(i.Val(), []byte("Node three")) {
+	if !bytes.Equal(reflect.ValueOf(i.Val()).Bytes(), []byte("Node three")) {
 		t.Errorf("Didn't iterate to next node")
 	}
 	if i.Key() != 3 {

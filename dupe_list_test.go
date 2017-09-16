@@ -2,6 +2,7 @@ package skiplist
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
@@ -46,7 +47,7 @@ func TestDupeListSearchFound(t *testing.T) {
 	if found == nil {
 		t.Errorf("Should have found a node for 35")
 	}
-	if !bytes.Equal(found.val, []byte("My value")) {
+	if !bytes.Equal(reflect.ValueOf(found.val).Bytes(), []byte("My value")) {
 		t.Errorf("Value should have been 'My value'")
 	}
 }
@@ -59,7 +60,7 @@ func TestDupeListSearchDupeKeys(t *testing.T) {
 	if found == nil {
 		t.Errorf("Should have found a node for 35")
 	}
-	if !bytes.Equal(found.val, []byte("35 35")) {
+	if !bytes.Equal(reflect.ValueOf(found.val).Bytes(), []byte("35 35")) {
 		t.Errorf("Value should have been '35 35' but got %+v", found.val)
 	}
 }
@@ -73,7 +74,7 @@ func TestDupeListSearchKeyVal(t *testing.T) {
 		t.Errorf("Should not have found a node with mismatched value but got %+v", found)
 	}
 	found = l.SearchKeyVal(35, []byte("My value"))
-	if !bytes.Equal(found.val, []byte("My value")) {
+	if !bytes.Equal(reflect.ValueOf(found.val).Bytes(), []byte("My value")) {
 		t.Errorf("Value should have been 'My value' but got %+v", found.val)
 	}
 }

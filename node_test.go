@@ -2,6 +2,7 @@ package skiplist
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestNewNode(t *testing.T) {
 	if n.key != 2 {
 		t.Errorf("Key should be set to 2")
 	}
-	if !bytes.Equal(n.val, []byte("Node two")) {
+	if !bytes.Equal(reflect.ValueOf(n.val).Bytes(), []byte("Node two")) {
 		t.Errorf("Val should be set to 'Node two'")
 	}
 }
